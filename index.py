@@ -14,9 +14,18 @@ def principal():
 def contacto():
     return render_template("contacto.html")
 
-@app.route("/deportes")
+@app.route("/futbol")
 def futbol():
-    return render_template("deportes.html")
+    return render_template("/deportes/futbol.html")
+
+@app.route("/basquet")
+def futbol():
+    return render_template("/deportes/basquet.html")
+
+@app.route("/voley")
+def futbol():
+    return render_template("/deportes/voley.html")
+
 
 if __name__ == 	'__main__':
     app.run(debug=True,port=3500)
