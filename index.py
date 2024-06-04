@@ -19,11 +19,11 @@ def futbol():
     return render_template("/deportes/futbol.html")
 
 @app.route("/basquet")
-def futbol():
+def basquet():
     return render_template("/deportes/basquet.html")
 
 @app.route("/voley")
-def futbol():
+def voley():
     return render_template("/deportes/voley.html")
 
 
