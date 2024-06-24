@@ -171,8 +171,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  //guarda todos los cambios
-  document.getElementById('save-all-btn').addEventListener('click', function() {
+/*
+document.getElementById('save-all-btn').addEventListener('click', function() {
     let rows = document.querySelectorAll('.row');
     let dataToSave = [];
 
@@ -218,4 +218,5 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .catch(error => console.error('Error al guardar todos los cambios:', error));
   });
-});
+  */
+}); 

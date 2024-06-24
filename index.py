@@ -97,7 +97,7 @@ def eliminar_escuela(escuela_id):
 
     return jsonify({'message': 'Escuela eliminada correctamente'}), 200
 
-@app.route("/guardar_todos_los_cambios", methods=['POST'])
+"""@app.route("/guardar_todos_los_cambios", methods=['POST'])
 def guardar_todos_los_cambios():
     data_to_save = request.json
 
@@ -127,7 +127,7 @@ def guardar_todos_los_cambios():
 
         db.session.commit()
 
-    return jsonify({'message': 'Todos los cambios guardados correctamente'}), 200
+    return jsonify({'message': 'Todos los cambios guardados correctamente'}), 200"""
 
 @app.route("/basquet")
 def basquet():
