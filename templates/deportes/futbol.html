@@ -17,42 +17,45 @@
     <div class="col border border-white">Acciones</div>
   </div>
   <div id="school-rows">
-    <div class="row bg-light text-dark py-2" id="school-1">
+    {% for escuela in escuelas %}
+    <div class="row bg-light text-dark py-2" data-id="{{ escuela.id }}">
       <div class="col border border-dark">
-        <input type="text" class="form-control" value="Example School 1" disabled>
+        <input type="text" class="form-control nombre" value="{{ escuela.nombre }}" disabled>
       </div>
       <div class="col border">
-        <input type="number" class="form-control" value="30" disabled>
+        <input type="number" class="form-control pts" value="{{ escuela.pts }}" disabled>
       </div>
       <div class="col border">
-        <input type="number" class="form-control" value="10" disabled>
+        <input type="number" class="form-control pj" value="{{ escuela.pj }}" disabled>
       </div>
       <div class="col border">
-        <input type="number" class="form-control" value="9" disabled>
+        <input type="number" class="form-control pg" value="{{ escuela.pg }}" disabled>
       </div>
       <div class="col border">
-        <input type="number" class="form-control" value="1" disabled>
+        <input type="number" class="form-control pp" value="{{ escuela.pp }}" disabled>
       </div>
       <div class="col border">
-        <input type="number" class="form-control" value="25" disabled>
+        <input type="number" class="form-control gf" value="{{ escuela.gf }}" disabled>
       </div>
       <div class="col border">
-        <input type="number" class="form-control" value="5" disabled>
+        <input type="number" class="form-control gc" value="{{ escuela.gc }}" disabled>
       </div>
       <div class="col border">
-        <input type="number" class="form-control" value="20" disabled>
+        <input type="number" class="form-control dg" value="{{ escuela.dg }}" disabled>
       </div>
       <div class="col border d-flex align-items-center justify-content-around">
         <button class="btn btn-primary edit-btn">Editar</button>
         <button class="btn btn-success save-btn" style="display:none;">Guardar</button>
+        <button class="btn btn-danger delete-btn">Eliminar</button>
       </div>
     </div>
+    {% endfor %}
   </div>
   <button id="add-school-btn" class="btn btn-secondary mt-3">Agregar Escuela</button>
   <button id="save-all-btn" class="btn btn-primary mt-3">Guardar Todo</button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script src="/static/js/futbol.js"/>
+<script src="/static/js/futbol.js"></script>
 
 {% endblock %}
