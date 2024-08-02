@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar  bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="/home">Principal</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -22,14 +22,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Deportes
                         </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('futbol') }}"">Fútbol</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('basquet') }}">Basquet</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('voley') }}">Voley</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('futbol') }}">Fútbol</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('basquet') }}">Básquet</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('voley') }}">Vóley</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -41,6 +40,9 @@
     </nav>
     <div class="container">
         {% block body %}
+        <div class="image-container">
+            <img src="/static/img/cupula.jpg" alt="Imagen">
+        </div>
         {% endblock %}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

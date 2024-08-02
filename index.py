@@ -29,6 +29,20 @@ class EscuelaFutbol(db.Model):
     def __repr__(self):
         return f'<EscuelaFutbol {self.id}: {self.nombre}>'
 
+class EscuelaVoley(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(50), nullable=False)
+    pts = db.Column(db.Integer, nullable=False)
+    pj = db.Column(db.Integer, nullable=False)
+    pg = db.Column(db.Integer, nullable=False)
+    pp = db.Column(db.Integer, nullable=False)
+    gf = db.Column(db.Integer, nullable=False)
+    gc = db.Column(db.Integer, nullable=False)
+    dg = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return f'<EscuelaVoley {self.id}: {self.nombre}>'
+
 @app.route("/")
 def login():
     return render_template("login.html")
@@ -65,6 +79,25 @@ def guardar_escuela():
     
     return jsonify({'message': 'Escuela guardada correctamente'}), 200
 
+@app.route("/guardar_escuela/voley", methods=['POST'])
+def guardar_escuela_voley():
+    data = request.json
+
+    nombre = data.get('nombre')
+    pts = data.get('pts')
+    pj = data.get('pj')
+    pg = data.get('pg')
+    pp = data.get('pp')
+    gf = data.get('gf')
+    gc = data.get('gc')
+    dg = data.get('dg', gf - gc)
+    
+    nueva_escuela = EscuelaVoley(nombre=nombre, pts=pts, pj=pj, pg=pg, pp=pp, gf=gf, gc=gc, dg=dg)
+    db.session.add(nueva_escuela)
+    db.session.commit()
+    
+    return jsonify({'message': 'Escuela guardada correctamente'}), 200
+
 @app.route("/actualizar_escuela/<int:escuela_id>", methods=['PUT'])
 def actualizar_escuela(escuela_id):
     escuela = EscuelaFutbol.query.get(escuela_id)
@@ -96,38 +129,6 @@ def eliminar_escuela(escuela_id):
     db.session.commit()
 
     return jsonify({'message': 'Escuela eliminada correctamente'}), 200
-
-"""@app.route("/guardar_todos_los_cambios", methods=['POST'])
-def guardar_todos_los_cambios():
-    data_to_save = request.json
-
-    for data in data_to_save:
-        escuela_id = data.get('escuela_id')
-        nombre = data.get('nombre')
-        pts = data.get('pts')
-        pj = data.get('pj')
-        pg = data.get('pg')
-        pp = data.get('pp')
-        gf = data.get('gf')
-        gc = data.get('gc')
-        dg = data.get('dg', gf - gc)
-
-        escuela = EscuelaFutbol.query.get(escuela_id)
-        if not escuela:
-            return jsonify({'error': f'Escuela con ID {escuela_id} no encontrada'}), 404
-
-        escuela.nombre = nombre
-        escuela.pts = pts
-        escuela.pj = pj
-        escuela.pg = pg
-        escuela.pp = pp
-        escuela.gf = gf
-        escuela.gc = gc
-        escuela.dg = dg
-
-        db.session.commit()
-
-    return jsonify({'message': 'Todos los cambios guardados correctamente'}), 200"""
 
 @app.route("/basquet")
 def basquet():
