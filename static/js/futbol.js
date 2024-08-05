@@ -10,67 +10,72 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   //guarda cambios en una escuela existente
-  document.querySelectorAll('.save-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      let row = this.closest('.row');
-      let escuelaId = row.dataset.id;
-  
-      let nombre = row.querySelector('.nombre').value;
-      let pts = parseInt(row.querySelector('.pts').value);
-      let pj = parseInt(row.querySelector('.pj').value);
-      let pg = parseInt(row.querySelector('.pg').value);
-      let pp = parseInt(row.querySelector('.pp').value);
-      let gf = parseInt(row.querySelector('.gf').value);
-      let gc = parseInt(row.querySelector('.gc').value);
-      let dg = gf - gc;
-  
-      let data = {
-        nombre: nombre,
-        pts: pts,
-        pj: pj,
-        pg: pg,
-        pp: pp,
-        gf: gf,
-        gc: gc,
-        dg: dg
-      };
-  
-      fetch(`/actualizar_escuela/${escuelaId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-      .then(response => {
-        if (response.ok) {
-          //actualiza vlaores
-          row.querySelector('.nombre').value = nombre;
-          row.querySelector('.pts').value = pts;
-          row.querySelector('.pj').value = pj;
-          row.querySelector('.pg').value = pg;
-          row.querySelector('.pp').value = pp;
-          row.querySelector('.gf').value = gf;
-          row.querySelector('.gc').value = gc;
-          row.querySelector('.dg').value = dg;
-  
-          //deshabilita inputs y muestra el boton de editar nuevamente
-          row.querySelectorAll('input').forEach(input => input.disabled = true);
-          btn.style.display = 'none';
-          row.querySelector('.edit-btn').style.display = 'inline-block';
-        }
-      })
-      .catch(error => console.error('Error al guardar escuela:', error));
-    });
-  });
+  let deporte = 'futbol'; // Cambia esto dinámicamente según el contexto o la página actual
 
+document.querySelectorAll('.save-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        let row = this.closest('.row');
+        let escuelaId = row.dataset.id;
+
+        // Obtén los valores de los campos de entrada
+        let nombre = row.querySelector('.nombre').value;
+        let pts = parseInt(row.querySelector('.pts').value);
+        let pj = parseInt(row.querySelector('.pj').value);
+        let pg = parseInt(row.querySelector('.pg').value);
+        let pp = parseInt(row.querySelector('.pp').value);
+        let gf = parseInt(row.querySelector('.gf').value);
+        let gc = parseInt(row.querySelector('.gc').value);
+        let dg = gf - gc;
+
+        // Prepara los datos para enviar
+        let data = {
+            nombre: nombre,
+            pts: pts,
+            pj: pj,
+            pg: pg,
+            pp: pp,
+            gf: gf,
+            gc: gc,
+            dg: dg
+        };
+
+        // Realiza la solicitud de actualización
+        fetch(`/actualizar_escuela/${deporte}/${escuelaId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                // Actualiza los valores en la interfaz de usuario
+                row.querySelector('.nombre').value = nombre;
+                row.querySelector('.pts').value = pts;
+                row.querySelector('.pj').value = pj;
+                row.querySelector('.pg').value = pg;
+                row.querySelector('.pp').value = pp;
+                row.querySelector('.gf').value = gf;
+                row.querySelector('.gc').value = gc;
+                row.querySelector('.dg').value = dg;
+
+                // Deshabilita inputs y muestra el botón de editar nuevamente
+                row.querySelectorAll('input').forEach(input => input.disabled = true);
+                btn.style.display = 'none';
+                row.querySelector('.edit-btn').style.display = 'inline-block';
+            }
+        })
+        .catch(error => console.error('Error al actualizar escuela:', error));
+    });
+});
   //elimina una escuela
   document.querySelectorAll('.delete-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       let row = this.closest('.row');
       let escuelaId = row.dataset.id;
-
-      fetch(`/eliminar_escuela/${escuelaId}`, {
+      let deporte = "futbol"
+      
+      fetch(`/eliminar_escuela/${deporte}/${escuelaId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
@@ -79,6 +84,10 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(response => {
         if (response.ok) {
           row.remove();
+        } else {
+          return response.json().then(data => {
+            console.error('Error al eliminar escuela:', data.error);
+          });
         }
       })
       .catch(error => console.error('Error al eliminar escuela:', error));

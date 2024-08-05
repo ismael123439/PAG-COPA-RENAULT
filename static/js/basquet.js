@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   
     //guarda cambios en una escuela existente
-    let deporte = 'voley'; // Cambia esto dinámicamente según el contexto o la página actual
+    let deporte = 'basquet'; // Cambia esto dinámicamente según el contexto o la página actual
 
 document.querySelectorAll('.save-btn').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -71,29 +71,30 @@ document.querySelectorAll('.save-btn').forEach(btn => {
   
     //elimina una escuela
     document.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        let row = this.closest('.row');
-        let escuelaId = row.dataset.id;
-        let deporte = "voley"
-        
-        fetch(`/eliminar_escuela/${deporte}/${escuelaId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(response => {
-          if (response.ok) {
-            row.remove();
-          } else {
-            return response.json().then(data => {
-              console.error('Error al eliminar escuela:', data.error);
-            });
-          }
-        })
-        .catch(error => console.error('Error al eliminar escuela:', error));
+        btn.addEventListener('click', function() {
+          let row = this.closest('.row');
+          let escuelaId = row.dataset.id;
+          let deporte = "basquet"
+          
+          fetch(`/eliminar_escuela/${deporte}/${escuelaId}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => {
+            if (response.ok) {
+              row.remove();
+            } else {
+              return response.json().then(data => {
+                console.error('Error al eliminar escuela:', data.error);
+              });
+            }
+          })
+          .catch(error => console.error('Error al eliminar escuela:', error));
+        });
       });
-    });
+      
   
     //agrega una nueva escuela
     document.getElementById('add-school-btn').addEventListener('click', function() {
@@ -159,7 +160,7 @@ document.querySelectorAll('.save-btn').forEach(btn => {
           dg: dg
         };
   
-        fetch('/guardar_escuela/voley', {
+        fetch('/guardar_escuela/basquet', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

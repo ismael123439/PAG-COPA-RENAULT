@@ -19,10 +19,10 @@
         {% for escuela in escuelas %}
         <div class="row bg-light text-dark py-2" data-id="{{ escuela.id }}">
             <div class="col border border-dark">
-                <input type="text" class="form-control nombre" value="{{ escuela.nombre }}" disabled>
+                <input type="text" class="form-control nombre" value="{{ escuela.nombre }}" disabled required>
             </div>
             <div class="col border">
-                <input type="number" class="form-control pts" value="{{ escuela.pts }}" disabled>
+                <input type="number" class="form-control pts" value="{{ escuela.pts }}" disabled required>
             </div>
             <div class="col border">
                 <input type="number" class="form-control pj" value="{{ escuela.pj }}" disabled>
@@ -51,7 +51,6 @@
         {% endfor %}
     </div>
     <button id="add-school-btn" class="btn btn-secondary mt-3">Agregar Escuela</button>
-    <button id="save-all-btn" class="btn btn-primary mt-3">Guardar Todo</button>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="/static/js/voley.js"></script>

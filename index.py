@@ -43,6 +43,20 @@ class EscuelaVoley(db.Model):
     def __repr__(self):
         return f'<EscuelaVoley {self.id}: {self.nombre}>'
 
+class EscuelaBasquet(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(50), nullable=False)
+    pts = db.Column(db.Integer, nullable=False)
+    pj = db.Column(db.Integer, nullable=False)
+    pg = db.Column(db.Integer, nullable=False)
+    pp = db.Column(db.Integer, nullable=False)
+    gf = db.Column(db.Integer, nullable=False)
+    gc = db.Column(db.Integer, nullable=False)
+    dg = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return f'<EscuelaBasquet {self.id}: {self.nombre}>'
+
 @app.route("/")
 def login():
     return render_template("login.html")
@@ -59,6 +73,16 @@ def contacto():
 def futbol():
     escuelas = EscuelaFutbol.query.all()
     return render_template("/deportes/futbol.html", escuelas=escuelas)
+
+@app.route("/voley", methods=['GET'])
+def voley():
+    escuelas = EscuelaVoley.query.all()
+    return render_template("/deportes/voley.html", escuelas=escuelas)
+
+@app.route("/basquet", methods=['GET'])
+def basquet():
+    escuelas = EscuelaBasquet.query.all()
+    return render_template("/deportes/basquet.html", escuelas=escuelas)
 
 @app.route("/guardar_escuela", methods=['POST'])
 def guardar_escuela():
@@ -98,11 +122,39 @@ def guardar_escuela_voley():
     
     return jsonify({'message': 'Escuela guardada correctamente'}), 200
 
-@app.route("/actualizar_escuela/<int:escuela_id>", methods=['PUT'])
-def actualizar_escuela(escuela_id):
-    escuela = EscuelaFutbol.query.get(escuela_id)
+@app.route("/guardar_escuela/basquet", methods=['POST'])
+def guardar_escuela_basquet():
+    data = request.json
+
+    nombre = data.get('nombre')
+    pts = data.get('pts')
+    pj = data.get('pj')
+    pg = data.get('pg')
+    pp = data.get('pp')
+    gf = data.get('gf')
+    gc = data.get('gc')
+    dg = data.get('dg', gf - gc)
+    
+    nueva_escuela = EscuelaBasquet(nombre=nombre, pts=pts, pj=pj, pg=pg, pp=pp, gf=gf, gc=gc, dg=dg)
+    db.session.add(nueva_escuela)
+    db.session.commit()
+    
+    return jsonify({'message': 'Escuela guardada correctamente'}), 200
+
+@app.route("/actualizar_escuela/<string:deporte>/<int:escuela_id>", methods=['PUT'])
+def actualizar_escuela(deporte, escuela_id):
+    if deporte == 'futbol':
+        Escuela = EscuelaFutbol
+    elif deporte == 'voley':
+        Escuela = EscuelaVoley
+    elif deporte == 'basquet':
+        Escuela = EscuelaBasquet
+    else:
+        return jsonify({'error': 'Deporte no válido'}), 400
+
+    escuela = Escuela.query.get(escuela_id)
     if not escuela:
-        return jsonify({'error': 'Escuela no encontrada'}), 404
+        return jsonify({'error': f'Escuela de {deporte.capitalize()} no encontrada'}), 404
     
     data = request.json
 
@@ -117,26 +169,29 @@ def actualizar_escuela(escuela_id):
 
     db.session.commit()
 
-    return jsonify({'message': 'Escuela actualizada correctamente'}), 200
+    return jsonify({'message': f'Escuela de {deporte.capitalize()} actualizada correctamente'}), 200
 
-@app.route("/eliminar_escuela/<int:escuela_id>", methods=['DELETE'])
-def eliminar_escuela(escuela_id):
-    escuela = EscuelaFutbol.query.get(escuela_id)
+@app.route("/eliminar_escuela/<string:deporte>/<int:escuela_id>", methods=['DELETE'])
+def eliminar_escuela(deporte, escuela_id):
+    if deporte == 'futbol':
+        escuela = EscuelaFutbol.query.get(escuela_id)
+    elif deporte == 'voley':
+        escuela = EscuelaVoley.query.get(escuela_id)
+    elif deporte == 'basquet':
+        escuela = EscuelaBasquet.query.get(escuela_id)
+    else:
+        return jsonify({'error': 'Deporte no válido'}), 400
+
     if not escuela:
-        return jsonify({'error': 'Escuela no encontrada'}), 404
+        return jsonify({'error': f'Escuela de {deporte} no encontrada'}), 404
 
     db.session.delete(escuela)
     db.session.commit()
 
-    return jsonify({'message': 'Escuela eliminada correctamente'}), 200
+    return jsonify({'message': f'Escuela de {deporte} eliminada correctamente'}), 200
 
-@app.route("/basquet")
-def basquet():
-    return render_template("/deportes/basquet.html")
-
-@app.route("/voley")
-def voley():
-    return render_template("/deportes/voley.html")
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True, port=3500)
