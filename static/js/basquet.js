@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   
     //guarda cambios en una escuela existente
-    let deporte = 'basquet'; // Cambia esto dinámicamente según el contexto o la página actual
+    let deporte = 'basquet'; // Cambia esto dinámicamente según el contexto o la página actualpl
 
 document.querySelectorAll('.save-btn').forEach(btn => {
     btn.addEventListener('click', function() {

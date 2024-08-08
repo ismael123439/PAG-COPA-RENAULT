@@ -57,11 +57,11 @@ class EscuelaBasquet(db.Model):
     def __repr__(self):
         return f'<EscuelaBasquet {self.id}: {self.nombre}>'
 
-@app.route("/")
+@app.route("/login")
 def login():
     return render_template("login.html")
 
-@app.route("/home")
+@app.route("/")
 def principal():
     return render_template("index.html")
 
