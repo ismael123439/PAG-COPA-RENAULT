@@ -43,16 +43,20 @@
       <div class="col border">
         <input type="number" class="form-control dg" value="{{ escuela.dg }}" disabled>
       </div>
-      <div class="col border d-flex align-items-center justify-content-around">
-        <button class="btn btn-primary edit-btn">Editar</button>
-        <button class="btn btn-success save-btn" style="display:none;">Guardar</button>
-        <button class="btn btn-danger delete-btn">Eliminar</button>
-      </div>
+      {% if es_admin %}
+        <div class="col border d-flex align-items-center justify-content-around">
+          <button class="btn btn-primary edit-btn">Editar</button>
+          <button class="btn btn-success save-btn" style="display:none;">Guardar</button>
+          <button class="btn btn-danger delete-btn">Eliminar</button>
+        </div>
+      {% endif %}
     </div>
     {% endfor %}
   </div>
-  <button id="add-school-btn" class="btn btn-secondary mt-3">Agregar Escuela</button>
-</div>
+  {% if es_admin %}
+    <button id="add-school-btn" class="btn btn-secondary mt-3">Agregar Escuela</button>
+  {% endif %}
+</div> 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="/static/js/basquet.js"></script>

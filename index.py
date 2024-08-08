@@ -1,9 +1,12 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
 CORS(app)
+app.secret_key = os.urandom(24)
+#app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'hola125')
 
 username = 'ude5ew8s9zf8o1bw'
 password = 'zucUaOmeMxamFHXfORRJ'
@@ -57,13 +60,30 @@ class EscuelaBasquet(db.Model):
     def __repr__(self):
         return f'<EscuelaBasquet {self.id}: {self.nombre}>'
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template("login.html")
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username == 'admin' and password == 'adminpassword':
+            session['es_admin'] = True
+            return redirect(url_for('principal')) 
+        else:
+            return render_template('login.html', error='Credenciales incorrectas')
+
+    return render_template('login.html')
+
+@app.route("/logout")
+def logout():
+    session.pop('es_admin', None)
+    return redirect(url_for('principal'))
 
 @app.route("/")
 def principal():
-    return render_template("index.html")
+    es_admin = session.get('es_admin', False)
+    print(f'Es administrador: {es_admin}')
+    return render_template("index.html", es_admin=es_admin)
 
 @app.route("/contacto")
 def contacto():
@@ -72,17 +92,20 @@ def contacto():
 @app.route("/futbol", methods=['GET'])
 def futbol():
     escuelas = EscuelaFutbol.query.all()
-    return render_template("/deportes/futbol.html", escuelas=escuelas)
+    es_admin = session.get('es_admin', False)
+    return render_template("/deportes/futbol.html", escuelas=escuelas, es_admin=es_admin)
 
 @app.route("/voley", methods=['GET'])
 def voley():
     escuelas = EscuelaVoley.query.all()
-    return render_template("/deportes/voley.html", escuelas=escuelas)
+    es_admin = session.get('es_admin', False)
+    return render_template("/deportes/voley.html", escuelas=escuelas, es_admin=es_admin)
 
 @app.route("/basquet", methods=['GET'])
 def basquet():
     escuelas = EscuelaBasquet.query.all()
-    return render_template("/deportes/basquet.html", escuelas=escuelas)
+    es_admin = session.get('es_admin', False)
+    return render_template("/deportes/basquet.html", escuelas=escuelas, es_admin=es_admin)
 
 @app.route("/guardar_escuela", methods=['POST'])
 def guardar_escuela():
@@ -194,4 +217,5 @@ def eliminar_escuela(deporte, escuela_id):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+    app.secret_key = "hola"
     app.run(debug=True, port=3500)

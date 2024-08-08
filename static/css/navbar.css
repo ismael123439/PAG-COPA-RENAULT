@@ -1,0 +1,13 @@
+.dropdown-menu {
+    background-color: black !important; /* Dark background */
+    color: #f8f9fa !important; /* Light text */
+}
+
+.dropdown-item {
+    color: #f8f9fa !important; /* Light text */
+}
+
+.dropdown-item:hover {
+    background-color: #495057 !important; /* bg-secondary on hover */
+    color: #ffffff !important; /* text-light on hover */
+}
