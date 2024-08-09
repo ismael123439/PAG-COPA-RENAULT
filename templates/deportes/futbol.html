@@ -5,6 +5,7 @@
 {% block body %}
 
 <div class="container mt-5">
+  <h2>Fútbol - Categoría mayor</h2>
   <div class="row bg-warning text-dark py-2">
     <div class="col border border-dark">Escuela</div>
     <div class="col border border-white">Pts</div>
@@ -16,7 +17,62 @@
     <div class="col border border-white">DG</div>
     <div class="col border border-white">Acciones</div>
   </div>
-  <div id="school-rows">
+  <div id="school-rows-mayor" class="school-rows">
+    {% for escuela in escuelas %}
+    <div class="row bg-light text-dark py-2" data-id="{{ escuela.id }}">
+      <div class="col border border-dark">
+        <input type="text" class="form-control nombre" value="{{ escuela.nombre }}" disabled>
+      </div>
+      <div class="col border">
+        <input type="number" class="form-control pts" value="{{ escuela.pts }}" disabled>
+      </div>
+      <div class="col border">
+        <input type="number" class="form-control pj" value="{{ escuela.pj }}" disabled>
+      </div>
+      <div class="col border">
+        <input type="number" class="form-control pg" value="{{ escuela.pg }}" disabled>
+      </div>
+      <div class="col border">
+        <input type="number" class="form-control pp" value="{{ escuela.pp }}" disabled>
+      </div>
+      <div class="col border">
+        <input type="number" class="form-control gf" value="{{ escuela.gf }}" disabled>
+      </div>
+      <div class="col border">
+        <input type="number" class="form-control gc" value="{{ escuela.gc }}" disabled>
+      </div>
+      <div class="col border">
+        <input type="number" class="form-control dg" value="{{ escuela.dg }}" disabled>
+      </div>
+      {% if es_admin %}
+        <div class="col border d-flex align-items-center justify-content-around">
+          <button class="btn btn-primary edit-btn">Editar</button>
+          <button class="btn btn-success save-btn" style="display:none;">Guardar</button>
+          <button class="btn btn-danger delete-btn">Eliminar</button>
+        </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% if es_admin %}
+    <button id="add-school-btn" class="btn btn-secondary mt-3">Agregar Escuela</button>
+  {% endif %}
+
+</div>
+<div class="container mt-5">
+  <h2>Fútbol - Categoría menor</h2>
+  <div class="row bg-warning text-dark py-2">
+    <div class="col border border-dark">Escuela</div>
+    <div class="col border border-white">Pts</div>
+    <div class="col border border-white">PJ</div>
+    <div class="col border border-white">PG</div>
+    <div class="col border border-white">PP</div>
+    <div class="col border border-white">GF</div>
+    <div class="col border border-white">GC</div>
+    <div class="col border border-white">DG</div>
+    <div class="col border border-white">Acciones</div>
+  </div>
+  <div id="school-rows-menor" class="school-rows"">
     {% for escuela in escuelas %}
     <div class="row bg-light text-dark py-2" data-id="{{ escuela.id }}">
       <div class="col border border-dark">

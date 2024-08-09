@@ -2,11 +2,11 @@ from flask import Flask, request, jsonify, render_template, session, redirect, u
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 CORS(app)
 app.secret_key = os.urandom(24)
-#app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'hola125')
 
 username = 'ude5ew8s9zf8o1bw'
 password = 'zucUaOmeMxamFHXfORRJ'
@@ -17,6 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{username}:{pas
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 class EscuelaFutbol(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,9 +29,10 @@ class EscuelaFutbol(db.Model):
     gf = db.Column(db.Integer, nullable=False)
     gc = db.Column(db.Integer, nullable=False)
     dg = db.Column(db.Integer, nullable=False)
+    categoria = db.Column(db.String(20), nullable=False)  # Añadido
 
     def __repr__(self):
-        return f'<EscuelaFutbol {self.id}: {self.nombre}>'
+        return f'<EscuelaFutbol {self.id}: {self.nombre}, {self.categoria}>'
 
 class EscuelaVoley(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -82,7 +84,6 @@ def logout():
 @app.route("/")
 def principal():
     es_admin = session.get('es_admin', False)
-    print(f'Es administrador: {es_admin}')
     return render_template("index.html", es_admin=es_admin)
 
 @app.route("/contacto")
@@ -119,8 +120,9 @@ def guardar_escuela():
     gf = data.get('gf')
     gc = data.get('gc')
     dg = data.get('dg', gf - gc)
+    categoria = data.get('categoria', 'Mayores')  # Default a 'Mayores'
     
-    nueva_escuela = EscuelaFutbol(nombre=nombre, pts=pts, pj=pj, pg=pg, pp=pp, gf=gf, gc=gc, dg=dg)
+    nueva_escuela = EscuelaFutbol(nombre=nombre, pts=pts, pj=pj, pg=pg, pp=pp, gf=gf, gc=gc, dg=dg, categoria=categoria)
     db.session.add(nueva_escuela)
     db.session.commit()
     
@@ -189,6 +191,9 @@ def actualizar_escuela(deporte, escuela_id):
     escuela.gf = data.get('gf', escuela.gf)
     escuela.gc = data.get('gc', escuela.gc)
     escuela.dg = data.get('dg', escuela.gf - escuela.gc)
+    
+    if deporte == 'futbol':
+        escuela.categoria = data.get('categoria', escuela.categoria)
 
     db.session.commit()
 
@@ -213,9 +218,6 @@ def eliminar_escuela(deporte, escuela_id):
 
     return jsonify({'message': f'Escuela de {deporte} eliminada correctamente'}), 200
 
-
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.secret_key = "hola"
     app.run(debug=True, port=3500)

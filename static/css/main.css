@@ -11,3 +11,13 @@
     background-color: #495057 !important; /* bg-secondary on hover */
     color: #ffffff !important; /* text-light on hover */
 }
+
+.tit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.desc{
+    border-radius: 5%;
+}
