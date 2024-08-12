@@ -18,7 +18,7 @@
     <div class="col border border-white">Acciones</div>
   </div>
   <div id="school-rows-mayor" class="school-rows">
-    {% for escuela in escuelas %}
+    {% for escuela in escuelas_mayor %}
     <div class="row bg-light text-dark py-2" data-id="{{ escuela.id }}">
       <div class="col border border-dark">
         <input type="text" class="form-control nombre" value="{{ escuela.nombre }}" disabled>
@@ -55,7 +55,7 @@
     {% endfor %}
   </div>
   {% if es_admin %}
-    <button id="add-school-btn" class="btn btn-secondary mt-3">Agregar Escuela</button>
+    <button id="add-school-btn-mayor" class="btn btn-secondary mt-3">Agregar Escuela</button>
   {% endif %}
 
 </div>
@@ -73,7 +73,7 @@
     <div class="col border border-white">Acciones</div>
   </div>
   <div id="school-rows-menor" class="school-rows"">
-    {% for escuela in escuelas %}
+    {% for escuela in escuelas_menor %}
     <div class="row bg-light text-dark py-2" data-id="{{ escuela.id }}">
       <div class="col border border-dark">
         <input type="text" class="form-control nombre" value="{{ escuela.nombre }}" disabled>
@@ -110,7 +110,7 @@
     {% endfor %}
   </div>
   {% if es_admin %}
-    <button id="add-school-btn" class="btn btn-secondary mt-3">Agregar Escuela</button>
+    <button id="add-school-btn-menor" class="btn btn-secondary mt-3">Agregar Escuela</button>
   {% endif %}
 
 </div>

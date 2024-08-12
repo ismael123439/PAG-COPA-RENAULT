@@ -1,11 +1,11 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Función genérica para configurar botones de editar, guardar y eliminar
-  function setupRowActions(containerId) {
+  function setupRowActions(containerId, categoria) {
     const container = document.getElementById(containerId);
 
     // Editar una escuela
     container.querySelectorAll('.edit-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         let row = this.closest('.row');
         row.querySelectorAll('input').forEach(input => input.disabled = false);
         this.style.display = 'none';
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Guardar cambios en una escuela existente
     container.querySelectorAll('.save-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         let row = this.closest('.row');
         let escuelaId = row.dataset.id;
 
@@ -42,57 +42,57 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         // Realiza la solicitud de actualización
-        fetch(`/actualizar_escuela/${deporte}/${escuelaId}`, {
+        fetch(`/actualizar_escuela/${categoria.toLowerCase()}/${escuelaId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(data)
         })
-        .then(response => {
-          if (response.ok) {
-            // Deshabilita inputs y muestra el botón de editar nuevamente
-            row.querySelectorAll('input').forEach(input => input.disabled = true);
-            btn.style.display = 'none';
-            row.querySelector('.edit-btn').style.display = 'inline-block';
-          }
-        })
-        .catch(error => console.error('Error al actualizar escuela:', error));
+          .then(response => {
+            if (response.ok) {
+              // Deshabilita inputs y muestra el botón de editar nuevamente
+              row.querySelectorAll('input').forEach(input => input.disabled = true);
+              btn.style.display = 'none';
+              row.querySelector('.edit-btn').style.display = 'inline-block';
+            } else {
+              return response.json().then(data => {
+                console.error('Error al actualizar escuela:', data.error);
+              });
+            }
+          })
+          .catch(error => console.error('Error al actualizar escuela:', error));
       });
     });
 
     // Eliminar una escuela
     container.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         let row = this.closest('.row');
         let escuelaId = row.dataset.id;
 
-        fetch(`/eliminar_escuela/${deporte}/${escuelaId}`, {
+        fetch(`/eliminar_escuela/${categoria.toLowerCase()}/${escuelaId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json'
           }
         })
-        .then(response => {
-          if (response.ok) {
-            row.remove();
-          } else {
-            return response.json().then(data => {
-              console.error('Error al eliminar escuela:', data.error);
-            });
-          }
-        })
-        .catch(error => console.error('Error al eliminar escuela:', error));
+          .then(response => {
+            if (response.ok) {
+              row.remove();
+            } else {
+              return response.json().then(data => {
+                console.error('Error al eliminar escuela:', data.error);
+              });
+            }
+          })
+          .catch(error => console.error('Error al eliminar escuela:', error));
       });
     });
   }
 
-  // Configurar acciones para las filas de ambas categorías
-  setupRowActions('school-rows-mayor');
-  setupRowActions('school-rows-menor');
-
-  // Agregar una nueva escuela
-  document.getElementById('add-school-btn').addEventListener('click', function() {
+  // Función para agregar una nueva fila
+  function addSchoolRow(containerId, categoria) {
     let newRow = document.createElement('div');
     newRow.className = 'row bg-light text-dark py-2 new-school-row';
     newRow.innerHTML = `
@@ -125,10 +125,10 @@ document.addEventListener('DOMContentLoaded', function() {
         <button class="btn btn-success save-btn">Guardar</button>
         <button class="btn btn-danger delete-btn">Eliminar</button>
       </div>`;
-    
-    document.getElementById('school-rows').appendChild(newRow);
 
-    newRow.querySelector('.save-btn').addEventListener('click', function() {
+    document.getElementById(containerId).appendChild(newRow);
+
+    newRow.querySelector('.save-btn').addEventListener('click', function () {
       let row = this.closest('.row');
       let nombre = row.querySelector('.nombre').value;
       let pts = parseInt(row.querySelector('.pts').value);
@@ -147,7 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
         pp: pp,
         gf: gf,
         gc: gc,
-        dg: dg
+        dg: dg,
+        categoria: categoria
       };
 
       fetch('/guardar_escuela', {
@@ -157,18 +158,39 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         body: JSON.stringify(data)
       })
-      .then(response => {
-        if (response.ok) {
-          row.querySelectorAll('input').forEach(input => input.disabled = true);
-          this.style.display = 'none';
-          row.querySelector('.edit-btn').style.display = 'inline-block';
-        }
-      })
-      .catch(error => console.error('Error al guardar nueva escuela:', error));
+        .then(response => {
+          if (response.ok) {
+            row.querySelectorAll('input').forEach(input => input.disabled = true);
+            this.style.display = 'none';
+            row.querySelector('.edit-btn').style.display = 'inline-block';
+          } else {
+            return response.json().then(data => {
+              console.error('Error al guardar nueva escuela:', data.error);
+            });
+          }
+        })
+        .catch(error => console.error('Error al guardar nueva escuela:', error));
     });
 
-    newRow.querySelector('.delete-btn').addEventListener('click', function() {
+    newRow.querySelector('.delete-btn').addEventListener('click', function () {
       newRow.remove();
     });
-  });
+  }
+
+  // Configurar acciones para las filas de ambas categorías
+  setupRowActions('school-rows-mayor', 'futbol');
+  setupRowActions('school-rows-menor', 'futbol');
+
+  // Agregar una nueva escuela en ambas categorías
+  if (document.getElementById('add-school-btn-mayor')) {
+    document.getElementById('add-school-btn-mayor').addEventListener('click', function () {
+      addSchoolRow('school-rows-mayor', 'Mayor');
+    });
+  }
+
+  if (document.getElementById('add-school-btn-menor')) {
+    document.getElementById('add-school-btn-menor').addEventListener('click', function () {
+      addSchoolRow('school-rows-menor', 'Menor');
+    });
+  }
 });

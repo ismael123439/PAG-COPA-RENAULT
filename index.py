@@ -29,7 +29,7 @@ class EscuelaFutbol(db.Model):
     gf = db.Column(db.Integer, nullable=False)
     gc = db.Column(db.Integer, nullable=False)
     dg = db.Column(db.Integer, nullable=False)
-    categoria = db.Column(db.String(20), nullable=False)  # Añadido
+    categoria = db.Column(db.String(20), nullable=False)
 
     def __repr__(self):
         return f'<EscuelaFutbol {self.id}: {self.nombre}, {self.categoria}>'
@@ -70,7 +70,7 @@ def login():
 
         if username == 'admin' and password == 'adminpassword':
             session['es_admin'] = True
-            return redirect(url_for('principal')) 
+            return redirect(url_for('principal'))
         else:
             return render_template('login.html', error='Credenciales incorrectas')
 
@@ -92,9 +92,10 @@ def contacto():
 
 @app.route("/futbol", methods=['GET'])
 def futbol():
-    escuelas = EscuelaFutbol.query.all()
+    escuelas_mayor = EscuelaFutbol.query.filter_by(categoria='Mayor').all()
+    escuelas_menor = EscuelaFutbol.query.filter_by(categoria='Menor').all()
     es_admin = session.get('es_admin', False)
-    return render_template("/deportes/futbol.html", escuelas=escuelas, es_admin=es_admin)
+    return render_template("/deportes/futbol.html", escuelas_mayor=escuelas_mayor, escuelas_menor=escuelas_menor, es_admin=es_admin)
 
 @app.route("/voley", methods=['GET'])
 def voley():
@@ -111,6 +112,8 @@ def basquet():
 @app.route("/guardar_escuela", methods=['POST'])
 def guardar_escuela():
     data = request.json
+    if not data:
+        return jsonify({'error': 'Datos inválidos'}), 400
 
     nombre = data.get('nombre')
     pts = data.get('pts')
@@ -131,6 +134,8 @@ def guardar_escuela():
 @app.route("/guardar_escuela/voley", methods=['POST'])
 def guardar_escuela_voley():
     data = request.json
+    if not data:
+        return jsonify({'error': 'Datos inválidos'}), 400
 
     nombre = data.get('nombre')
     pts = data.get('pts')
@@ -150,6 +155,8 @@ def guardar_escuela_voley():
 @app.route("/guardar_escuela/basquet", methods=['POST'])
 def guardar_escuela_basquet():
     data = request.json
+    if not data:
+        return jsonify({'error': 'Datos inválidos'}), 400
 
     nombre = data.get('nombre')
     pts = data.get('pts')
@@ -177,11 +184,13 @@ def actualizar_escuela(deporte, escuela_id):
     else:
         return jsonify({'error': 'Deporte no válido'}), 400
 
-    escuela = Escuela.query.get(escuela_id)
+    escuela = db.session.get(Escuela, escuela_id)
     if not escuela:
         return jsonify({'error': f'Escuela de {deporte.capitalize()} no encontrada'}), 404
-    
+
     data = request.json
+    if not data:
+        return jsonify({'error': 'No se recibieron datos'}), 400
 
     escuela.nombre = data.get('nombre', escuela.nombre)
     escuela.pts = data.get('pts', escuela.pts)
@@ -202,11 +211,13 @@ def actualizar_escuela(deporte, escuela_id):
 @app.route("/eliminar_escuela/<string:deporte>/<int:escuela_id>", methods=['DELETE'])
 def eliminar_escuela(deporte, escuela_id):
     if deporte == 'futbol':
-        escuela = EscuelaFutbol.query.get(escuela_id)
+        escuela = db.session.get(EscuelaFutbol, escuela_id)
     elif deporte == 'voley':
-        escuela = EscuelaVoley.query.get(escuela_id)
+        escuela = db.session.get(EscuelaVoley, escuela_id)
     elif deporte == 'basquet':
-        escuela = EscuelaBasquet.query.get(escuela_id)
+        escuela = db.session.get(EscuelaBasquet, escuela_id)
+    elif deporte in ['mayor', 'menor']:  # Manejo de 'mayor' y 'menor'
+        escuela = EscuelaFutbol.query.filter_by(categoria=deporte).get(escuela_id)
     else:
         return jsonify({'error': 'Deporte no válido'}), 400
 
