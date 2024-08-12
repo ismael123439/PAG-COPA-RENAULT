@@ -1,5 +1,5 @@
 .dropdown-menu {
-    background-color: black !important; /* Dark background */
+    background-color: rgb(24, 24, 24) !important; /* Dark background */
     color: #f8f9fa !important; /* Light text */
 }
 
@@ -18,6 +18,43 @@
     align-items: center;
 }
 
-.desc{
-    border-radius: 5%;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: center;
+}
+
+header {
+    background-color: #ceb600;
+    color: rgb(23, 23, 23);
+    padding: 20px 0;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+p {
+    margin: 10px 0;
+}
+
+main {
+    padding: 20px;
+}
+
+h2 {
+    font-size: 2em;
+    color: #0072ce;
+    margin-bottom: 10px;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    margin-top: 20px;
 }

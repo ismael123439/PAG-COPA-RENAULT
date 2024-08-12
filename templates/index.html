@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/css/main.css">
-    
+
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
         <div class="container-fluid">
+            <img src="/static/img/logo.png" alt="Logo Copa Renault" width="30" height="30"
+                class="d-inline-block align-text-top">
             <a class="navbar-brand" href="/">Principal</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -21,12 +25,15 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             Deportes
                         </a>
                         <ul class="dropdown-menu bg-dark text-light" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item bg-dark text-light" href="{{ url_for('futbol') }}">Fútbol</a></li>
-                            <li><a class="dropdown-item bg-dark text-light" href="{{ url_for('basquet') }}">Básquet</a></li>
+                            <li><a class="dropdown-item bg-dark text-light" href="{{ url_for('futbol') }}">Fútbol</a>
+                            </li>
+                            <li><a class="dropdown-item bg-dark text-light" href="{{ url_for('basquet') }}">Básquet</a>
+                            </li>
                             <li><a class="dropdown-item bg-dark text-light" href="{{ url_for('voley') }}">Vóley</a></li>
                         </ul>
                     </li>
@@ -49,15 +56,47 @@
     </nav>
     <div class="container">
         {% block body %}
-        <div class="title">
-            <h1 >COPA RENAULT</h1>
-        </div>
-        <div class="desc">
-            <h3>La Copa Renault es un evento deportivo intercolegial organizado por el Instituto Técnico Renault en Córdoba, Argentina. Este evento anual, que comenzó en 2004, reúne a miles de estudiantes de escuelas secundarias de la ciudad para competir en varias disciplinas deportivas, como fútbol, vóley y básquet. En su vigésima edición, participaron alrededor de 3,000 estudiantes de 120 colegios​ </h3>
+        <header>
+            <h1>Copa Renault 2024</h1>
+        </header>
+        <main>
+            <section>
+                <h2>¿Qué es la Copa Renault?</h2>
+                <p>La Copa Renault es un evento deportivo intercolegial organizado por el Instituto Técnico Renault en
+                    Córdoba, Argentina. Este evento anual, que comenzó en 2004, reúne a miles de estudiantes de escuelas
+                    secundarias de la ciudad para competir en varias disciplinas deportivas, como fútbol, vóley y
+                    básquet. En su vigésima edición, participaron alrededor de 3,000 estudiantes de 120 colegios.</p>
+            </section>
 
-        </div>
+            <section>
+                <h2>Historia de la Copa Renault</h2>
+                <p>La Copa Renault nació en 2004 como una iniciativa del Instituto Técnico Renault para fomentar el
+                    deporte y la camaradería entre los estudiantes de secundaria en Córdoba. Desde sus inicios, el
+                    evento ha crecido significativamente, convirtiéndose en una de las competencias intercolegiales más
+                    importantes de la región. A lo largo de los años, la Copa ha evolucionado, incorporando nuevas
+                    disciplinas y aumentando el número de participantes y colegios involucrados.</p>
+            </section>
+            <img src="/static/img/cupula.jpg" alt="">
+            <section>
+                <h2>Datos Adicionales</h2>
+
+                <li>Año de Inicio:</strong> 2004</li>
+                <li><strong>Ediciones Realizadas:</strong> 20</li>
+                <li><strong>Participantes en la Última Edición:</strong> 3,000 estudiantes</li>
+                <li><strong>Colegios Participantes:</strong> 120</li>
+                <li><strong>Disciplinas Deportivas:</strong> Fútbol, Vóley, Básquet, y más</li>
+                <li><strong>Ubicación:</strong> Córdoba, Argentina</li>
+
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2024 Copa Renault. Todos los derechos reservados.</p>
+        </footer>
         {% endblock %}
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
