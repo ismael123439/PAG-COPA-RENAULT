@@ -44,9 +44,10 @@ class EscuelaVoley(db.Model):
     gf = db.Column(db.Integer, nullable=False)
     gc = db.Column(db.Integer, nullable=False)
     dg = db.Column(db.Integer, nullable=False)
+    categoria = db.Column(db.String(20), nullable=False)
 
     def __repr__(self):
-        return f'<EscuelaVoley {self.id}: {self.nombre}>'
+        return f'<EscuelaVoley {self.id}: {self.nombre}, {self.categoria}>'
 
 class EscuelaBasquet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -58,9 +59,10 @@ class EscuelaBasquet(db.Model):
     gf = db.Column(db.Integer, nullable=False)
     gc = db.Column(db.Integer, nullable=False)
     dg = db.Column(db.Integer, nullable=False)
+    categoria = db.Column(db.String(20), nullable=False)
 
     def __repr__(self):
-        return f'<EscuelaBasquet {self.id}: {self.nombre}>'
+        return f'<EscuelaBasquet {self.id}: {self.nombre}, {self.categoria}>'
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -99,15 +101,17 @@ def futbol():
 
 @app.route("/voley", methods=['GET'])
 def voley():
-    escuelas = EscuelaVoley.query.all()
+    escuelas_mayor = EscuelaVoley.query.filter_by(categoria='Mayor').all()
+    escuelas_menor = EscuelaVoley.query.filter_by(categoria='Menor').all()
     es_admin = session.get('es_admin', False)
-    return render_template("/deportes/voley.html", escuelas=escuelas, es_admin=es_admin)
+    return render_template("/deportes/voley.html", escuelas_mayor=escuelas_mayor, escuelas_menor=escuelas_menor, es_admin=es_admin)
 
 @app.route("/basquet", methods=['GET'])
 def basquet():
-    escuelas = EscuelaBasquet.query.all()
+    escuelas_mayor = EscuelaBasquet.query.filter_by(categoria='Mayor').all()
+    escuelas_menor = EscuelaBasquet.query.filter_by(categoria='Menor').all()
     es_admin = session.get('es_admin', False)
-    return render_template("/deportes/basquet.html", escuelas=escuelas, es_admin=es_admin)
+    return render_template("/deportes/basquet.html", escuelas_mayor=escuelas_mayor, escuelas_menor=escuelas_menor, es_admin=es_admin)
 
 @app.route("/guardar_escuela", methods=['POST'])
 def guardar_escuela():
@@ -145,8 +149,9 @@ def guardar_escuela_voley():
     gf = data.get('gf')
     gc = data.get('gc')
     dg = data.get('dg', gf - gc)
+    categoria = data.get('categoria', 'Mayores')
     
-    nueva_escuela = EscuelaVoley(nombre=nombre, pts=pts, pj=pj, pg=pg, pp=pp, gf=gf, gc=gc, dg=dg)
+    nueva_escuela = EscuelaVoley(nombre=nombre, pts=pts, pj=pj, pg=pg, pp=pp, gf=gf, gc=gc, dg=dg, categoria=categoria)
     db.session.add(nueva_escuela)
     db.session.commit()
     
