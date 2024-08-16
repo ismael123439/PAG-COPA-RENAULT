@@ -8,7 +8,7 @@
 }
 
 .dropdown-item:hover {
-    background-color: #242628 !important; /* bg-secondary on hover */
+    background-color: #34383b !important; /* bg-secondary on hover */
     color: #ffffff !important; /* text-light on hover */
 }
 

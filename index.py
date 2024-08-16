@@ -171,8 +171,9 @@ def guardar_escuela_basquet():
     gf = data.get('gf')
     gc = data.get('gc')
     dg = data.get('dg', gf - gc)
+    categoria = data.get('categoria', 'Mayores')
     
-    nueva_escuela = EscuelaBasquet(nombre=nombre, pts=pts, pj=pj, pg=pg, pp=pp, gf=gf, gc=gc, dg=dg)
+    nueva_escuela = EscuelaBasquet(nombre=nombre, pts=pts, pj=pj, pg=pg, pp=pp, gf=gf, gc=gc, dg=dg, categoria=categoria)
     db.session.add(nueva_escuela)
     db.session.commit()
     
