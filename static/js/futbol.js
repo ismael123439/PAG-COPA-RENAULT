@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // Función genérica para configurar botones de editar, guardar y eliminar
+  // configurar botones de editar, guardar y eliminar
   function setupRowActions(containerId, categoria) {
     const container = document.getElementById(containerId);
 
-    // Editar una escuela
+    // editar una escuela
     container.querySelectorAll('.edit-btn').forEach(btn => {
       btn.addEventListener('click', function () {
         let row = this.closest('.row');
@@ -13,13 +13,12 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    // Guardar cambios en una escuela existente
+    // guardar cambios en una escuela existente
     container.querySelectorAll('.save-btn').forEach(btn => {
       btn.addEventListener('click', function () {
         let row = this.closest('.row');
         let escuelaId = row.dataset.id;
 
-        // Obtén los valores de los campos de entrada
         let nombre = row.querySelector('.nombre').value;
         let pts = parseInt(row.querySelector('.pts').value);
         let pj = parseInt(row.querySelector('.pj').value);
@@ -29,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let gc = parseInt(row.querySelector('.gc').value);
         let dg = gf - gc;
 
-        // Prepara los datos para enviar
         let data = {
           nombre: nombre,
           pts: pts,
@@ -41,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
           dg: dg
         };
 
-        // Realiza la solicitud de actualización
         fetch(`/actualizar_escuela/${categoria.toLowerCase()}/${escuelaId}`, {
           method: 'PUT',
           headers: {
@@ -51,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
           .then(response => {
             if (response.ok) {
-              // Deshabilita inputs y muestra el botón de editar nuevamente
+              // deshabilita inputs y muestra el botón de editar nuevamente
               row.querySelectorAll('input').forEach(input => input.disabled = true);
               btn.style.display = 'none';
               row.querySelector('.edit-btn').style.display = 'inline-block';
@@ -65,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    // Eliminar una escuela
+    // eliminar una escuela
     container.querySelectorAll('.delete-btn').forEach(btn => {
       btn.addEventListener('click', function () {
         let row = this.closest('.row');
@@ -91,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Función para agregar una nueva fila
+  // función para agregar una nueva fila
   function addSchoolRow(containerId, categoria) {
     let newRow = document.createElement('div');
     newRow.className = 'row bg-light text-dark py-2 new-school-row';
@@ -177,11 +174,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Configurar acciones para las filas de ambas categorías
+  // configurar acciones para las filas de ambas categorías
   setupRowActions('school-rows-mayor', 'futbol');
   setupRowActions('school-rows-menor', 'futbol');
 
-  // Agregar una nueva escuela en ambas categorías
+  // agregar una nueva escuela en ambas categorías
   if (document.getElementById('add-school-btn-mayor')) {
     document.getElementById('add-school-btn-mayor').addEventListener('click', function () {
       addSchoolRow('school-rows-mayor', 'Mayor');
